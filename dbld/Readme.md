@@ -1,55 +1,56 @@
-Database Design for a Web Application
-This repository contains the database layer design for a web application. The design was created to meet specific requirements by identifying all key, weak, and associative entities, defining relationships with precise cardinality and ordinality, and clearly specifying the attributes for each entity.
+This schema represents a system where users can create tasks, and tasks can be categorized into multiple categories. Here's a detailed explanation:
 
-Overview
-The database design forms the core of the application and is based on the following steps:
+1. Tables and Their Purpose
+   users Table
+   This table is used to store information regarding the users of the system.
 
-Entity Identification:
-At least five unique entities have been created with meaningful names. These include:
+Column Name	DataType	Constraints	Description
+id	 integer	Primary Key	Unique identifier for every user.
+username	varchar	Unique	The name of the username the user creates. Should be unique across all users.
+email	varchar	Unique	The email address of the user. Must be unique across all users.
+password_hash	varchar	None	Stores the hashed password for secure authentication.
+created_at	timestamp	None	Records the timestamp when the user account was created.
+Purpose: This table manages user accounts and their credentials.
 
-Users: Represents the application’s users.
-Posts: Represents content created by users.
-Comments: Represents comments on posts.
-Follows: An associative (weak) entity capturing the many-to-many "follow" relationship between users.
-Likes: An associative (weak) entity that records which users "like" which posts.
-Relationship Definition:
-Relationships between these entities are defined with the correct cardinality:
+tasks Table
+This table stores information about tasks created by users.
 
-Users ↔ Posts: One-to-Many (one user can author many posts).
-Posts ↔ Comments: One-to-Many (each post can have many comments).
-Users ↔ Comments: One-to-Many (a user can write many comments).
-Users ↔ Follows: Many-to-Many via the Follows table.
-Users and Posts ↔ Likes: Many-to-Many via the Likes table.
-Attribute Specification:
-Each entity has clearly defined attributes:
+Column Name	Data Type	Constraints	Description
+id.integer	Primary Key	Unique identifier for each task.
+user_id.integer	Foreign Key (references users.id)	Identifies the user who created the task.
+title	varchar	None	The title or name of the task.
+description(text)No	Long description of the task.
+due_date(timestamp)No	Due date of the task.
+is_completed(boolean)No	Whether the task is completed or not.
+created_at(timestamp)NoRecords the timestamp when the task was created.
+updated_at(timestamp)NoRecords the timestamp when the task was last updated.
+Purpose - This table manages tasks created by users, including their details and status.
 
-Primary Keys: Unique identifiers for strong entities (e.g., id in Users, Posts, and Comments).
-Composite Keys: Used in associative entities (Follows and Likes) to uniquely identify a record by combining foreign keys.
-Foreign Keys: Ensure referential integrity (e.g., user_id in Posts, post_id and user_id in Comments).
-Other Attributes: Meaningful names such as username, email, title, body, and timestamps (created_at).
-Architectural Pattern:
-The chosen architectural pattern for building the web application is Model-View-Controller (MVC).
+categories Table
+This table contains information about categories that tasks can be assigned to.
 
-Model: Represents the database layer (designed using DBML in this repository).
-View: Responsible for rendering the user interface.
-Controller: Handles the business logic and acts as the intermediary between the Model and the View.
-Explanation
-Entities:
-The design includes five distinct entities with descriptive names. Users, Posts, and Comments are strong entities with independent primary keys. Follows and Likes are associative (weak) entities that utilize composite keys (consisting of foreign keys) to capture many-to-many relationships.
+Column Name	Data Type	Constraints	Description
+id(int)	Primary Key	Unique identifier for each category.
+name	varchar	Unique	The name of the category. Must be unique across all categories.
+color	varchar	None	A color associated with the category (e.g., for UI purposes).
+Purpose: This table manages categories that can be assigned to tasks.
 
-Relationships:
-Relationships between entities are depicted correctly:
+task_categories Table
+This is a junction table (also called an association table) that establishes a many-to-many relationship between tasks and categories.
 
-Each post is linked to one user.
-Each comment is linked to a post and a user.
-The Follows table represents the many-to-many relationship between users by referencing the same entity twice (using unique names for each reference).
-Similarly, the Likes table captures the many-to-many relationship between users and posts.
-Attributes:
-Attributes are clearly defined with:
+Column Name	Data Type	Constraints	Description
+task_id	integer	Foreign Key (references tasks.id)	Identifies the task.
+category_id	integer	Foreign Key (references categories.id)	Identifies the category.
+Indexes:
 
-Primary Keys: id for strong entities.
-Composite Keys: Defined using indexes in associative entities.
-Foreign Keys: Ensure relational integrity.
-Other Attributes: Such as username, email, title, and created_at which are self-explanatory.
-Architectural Pattern (MVC):
-The MVC pattern is ideal for this web application as it clearly separates data (Model), presentation (View), and control logic (Controller), making the system more maintainable and scalable.
+A composite unique index on the columns task_id, category_id guarantees that the task-category tuples will be unique. This ensures that duplicate assignment of one category to a task is never made.
+
+It associates tasks to categories. That means one task can be grouped into many different categories while a category will be able to contain many different tasks.
+
+2. Relationships Among Tables
+   One-to-Many Relationship
+   users and tasks:
+
+One user creates many tasks.
+
+That would be represented via the user_id foreign key in the tasks table, which references the column id in the users table.
