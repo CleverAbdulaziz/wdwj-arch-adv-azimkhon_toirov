@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Task Manager</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Professional Task Manager</h1>
+      </header>
+      <main>
+        <section class="task-input">
+          <input type="text" id="taskInput" placeholder="Enter a new task" />
+          <input type="date" id="dueDate" />
+          <select id="category">
+            <option value="">Select Category</option>
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="shopping">Shopping</option>
+          </select>
+          <button id="addTask"><i class="fas fa-plus"></i> Add Task</button>
+        </section>
+        <section class="task-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="active">Active</button>
+          <button class="filter-btn" data-filter="completed">Completed</button>
+        </section>
+        <section class="task-list">
+          <ul id="taskList"></ul>
+        </section>
+      </main>
+    </div>
+    <div id="notification" class="notification"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
