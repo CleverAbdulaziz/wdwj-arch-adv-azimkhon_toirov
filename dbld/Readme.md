@@ -1,7 +1,7 @@
-This schema represents a system where users can create tasks, and tasks can be categorized into multiple categories. Here's a detailed explanation:
+Thi schema represents a system where users can create tasks, and tasks can be categorized into multiple categories. Here's a detailed explanation:
 
 1. Tables and Their Purpose
-   users Table
+   users Table 
    This table is used to store information regarding the users of the system.
 
 Column Name	DataType	Constraints	Description
